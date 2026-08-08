@@ -543,20 +543,21 @@
                                         </div>
                                         <div id="details-2-editor">
                                             <div style="font-weight: 700; font-size: 12px; color: var(--accent); margin-bottom: 12px;">Saisie des Quantités Reçues et Coûts Réels :</div>
-                                            <form action="http://localhost:8000/addLivariason?id_appro=<?= $appro['id'] ?>" method="post">
+                                            <form action="http://localhost:8000/addLivariason?id_approvisionnment=<?= $appro['id'] ?>" method="post">
                                                 <div style="display: flex; flex-direction: column; gap: 10px;">
                                                     <!-- Item 1 -->
                                                     <?php foreach ($appro["ligneAppro"] as $ligne) : ?>
-                                                        <input type="hidden" name="ligne[<?= $ligne['id'] ?>]['produit_id']" value="<?= $ligne["produit_id"] ?>" id="recept-qty-2-1" class="form-control" style="padding:4px 8px; font-size:11px;">
+                                                        <input type="hidden" name="ligne[<?= $ligne['id'] ?>][produit_id]" value="<?= $ligne["produit_id"] ?>" id="recept-qty-2-1" class="form-control" style="padding:4px 8px; font-size:11px;">
+                                                        <input type="hidden" name="ligne[<?= $ligne['id'] ?>][id]" value="<?= $ligne["id"] ?>" id="recept-qty-2-1" class="form-control" style="padding:4px 8px; font-size:11px;">
                                                         <div style="display: grid; grid-template-columns: 2fr 1fr 1.2fr; gap: 12px; align-items: center; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.03);">
                                                             <span style="font-weight:700; font-size:12px;"><?= $ligne["libelle"] ?> (Attendu: <?= $ligne["qte"] ?> )</span>
                                                             <div>
                                                                 <label style="font-size:9px; color:var(--text-muted); display:block; margin-bottom:2px;">Qté Reçue</label>
-                                                                <input type="number" name="ligne[<?= $ligne['id'] ?>]['qte_recu']" value="<?= $ligne["qte"] ?>" id="recept-qty-2-1" class="form-control" style="padding:4px 8px; font-size:11px;">
+                                                                <input type="number" name="ligne[<?= $ligne['id'] ?>][qte_recu]" value="<?= $ligne["qte"] ?>" id="recept-qty-2-1" class="form-control" style="padding:4px 8px; font-size:11px;">
                                                             </div>
                                                             <div>
                                                                 <label style="font-size:9px; color:var(--text-muted); display:block; margin-bottom:2px;">Coût Achat (F)</label>
-                                                                <input type="number" name="ligne[<?= $ligne['id']?>]['prix_achat_reel']" value="<?= $ligne["prix_achat_reel"] ?>" id="recept-price-2-1" class="form-control" style="padding:4px 8px; font-size:11px;">
+                                                                <input type="number" name="ligne[<?= $ligne['id'] ?>][prix_achat_reel]" value="<?= $ligne["prix_achat_reel"] ?>" id="recept-price-2-1" class="form-control" style="padding:4px 8px; font-size:11px;">
                                                             </div>
                                                         </div>
                                                     <?php endforeach ?>

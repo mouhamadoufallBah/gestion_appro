@@ -11,7 +11,14 @@ function showLivreRapprochement(): void {
 }
 
 function addLivariason(): void{
-    $data = [$_POST, $_GET];
-    addApprovisionnement($_POST);
-    var_dump($data);
+    $data['id_approvisionnment'] = $_GET['id_approvisionnment'];
+    $data['detail_approvisionnement'] = $_POST;
+    $results =  addApprovisionnement($data);
+    if ($results) {
+        header('Location: http://localhost:8000/');
+        exit;
+    }else{
+        var_dump('erreur lors de la recption');die();
+    }
+
 }

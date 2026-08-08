@@ -81,16 +81,40 @@ function getAllApprovisionnement(): array
 
 function addApprovisionnement(array $data): int
 {
-  
-    echo "<pre>";
-    var_dump($data);
-    echo "</pre>";
-    die();
-
     $db = deconnecteDB();
+    try {
 
-    $db->beginTransaction();
+        $db->beginTransaction();
 
-    
-    return 0;
+        $sql_update_appro = "update approvisionnements set statut_id = :statut_id where id = :id";
+        $resAppro = executeUpdate($db, $sql_update_appro, ['statut_id' => 2, 'id' => $data['id_approvisionnment']]);
+
+        if ($resAppro == 0) {
+            throw new Exception('approvisonnement non modifier');
+        }
+
+        foreach ($data["detail_approvisionnement"]["ligne"] as $detail_approvisionnement) {
+            $sql_update_detail = "update detail_approvisionnements set qte_recu = :qte_recu, prix_achat_reel = :prix_achat_reel where id = :id";
+
+            $resDetail =  executeUpdate($db, $sql_update_detail, ['qte_recu' => $detail_approvisionnement['qte_recu'], 'prix_achat_reel' => $detail_approvisionnement['prix_achat_reel'], 'id' => $detail_approvisionnement['id']]);
+
+            if ($resDetail == 0) {
+                throw new Exception('detail non modifier');
+            }
+
+            $sql_update_produit = "update produits set qte_stock = qte_stock + :qte_recu where id = :id";
+            $resProd = executeUpdate($db, $sql_update_produit, ['qte_recu' => $detail_approvisionnement['qte_recu'], 'id' => $detail_approvisionnement['produit_id']]);
+            if ($resProd == 0) {
+                throw new Exception('produit non modifier');
+            }
+        }
+
+        $db->commit();
+    } catch (\Throwable $th) {
+        $th->getMessage();
+        $db->rollBack();
+        return false;
+    }
+
+    return true;
 }

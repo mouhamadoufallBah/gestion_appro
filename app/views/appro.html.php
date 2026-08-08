@@ -440,7 +440,7 @@
                         <span>🚚 Saisie d'Approvisionnement</span>
                         <span style="font-size: 11px; font-weight: 600; color: var(--text-muted); background: rgba(255,255,255,0.03); padding: 4px 8px; border-radius: 6px;">Nouveau Lot</span>
                     </div>
-                    <form id="supply-mock-form" onsubmit="event.preventDefault(); addNewDeliverySlip();">
+                    <form id="supply-mock-form" method="post" action="http://localhost:8000/addApprovisionnement">
 
                         <div class="form-group">
                             <label for="supplier-select">Fournisseur Partenaire</label>
@@ -458,39 +458,43 @@
                         <!-- Articles Dynamic add -->
                         <div style="border-top: 1px dashed var(--border-color); padding-top: 16px; margin-top: 16px; margin-bottom: 16px;">
                             <label style="font-size: 12px; font-weight: 700; color: var(--accent); display: block; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Sélection des Articles & Coûts d'Achat</label>
-                            <div style="display: grid; grid-template-columns: 2fr 1fr auto; gap: 12px; align-items: flex-end; margin-bottom: 16px;">
-                                <div class="form-group" style="margin-bottom: 0;">
-                                    <label for="pos-item-select">Article</label>
-                                    <select id="pos-item-select" class="form-control" style="background-color: #0b0f1a; color: white;">
-                                        <?php $produits = $produits ?? [];
-                                        foreach ($produits as $produit): ?>
-                                            <option value="<?= $produit['id'] ?>" data-name="<?= $produit['libelle'] ?>"> <?= $produit['libelle'] ?> (Coût d'achat : <?= $produit['prix_achat'] ?> F)</option>
-                                        <?php endforeach ?>
-                                    </select>
-                                </div>
-                                <div class="form-group" style="margin-bottom: 0;">
-                                    <label for="pos-qty">Quantité Lot</label>
-                                    <input type="number" id="pos-qty" class="form-control" value="10" min="1" style="padding: 12px 10px;">
-                                </div>
-                                <button type="button" class="btn-submit" onclick="addToCart(event)" style="height: 46px; width: 46px; font-size: 18px; display: flex; justify-content: center; align-items: center; background: linear-gradient(135deg, var(--accent) 0%, #0369a1 100%); font-weight: bold; border-radius: 10px;">+</button>
-                            </div>
+                            <!-- <form method="post" action="http://localhost:8000/addPanier"> -->
 
-                            <!-- Cart Items list table -->
-                            <table class="debt-table" style="font-size: 12px;">
-                                <thead>
-                                    <tr>
-                                        <th style="padding-bottom: 8px;">Produit</th>
-                                        <th style="padding-bottom: 8px;">Qté Livrée</th>
-                                        <th style="padding-bottom: 8px;">Coût Achat Total</th>
-                                        <th style="padding-bottom: 8px;"></th>
-                                    </tr>
-                                </thead>
-                                <tbody id="cart-rows">
-                                    <tr id="empty-cart-row">
-                                        <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 16px 0; border-bottom: none;">Aucun article dans ce lot. Ajoutez des lignes.</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                <div style="display: grid; grid-template-columns: 2fr 1fr auto; gap: 12px; align-items: flex-end; margin-bottom: 16px;">
+                                    <div class="form-group" style="margin-bottom: 0;">
+                                        <label for="pos-item-select">Article</label>
+                                        <select id="pos-item-select" class="form-control" style="background-color: #0b0f1a; color: white;" name="produit">
+                                            <?php $produits = $produits ?? [];
+                                            foreach ($produits as $produit): ?>
+                                                <option value="<?= htmlspecialchars(json_encode($produit)) ?>" data-name="<?= $produit['libelle'] ?>"> <?= $produit['libelle'] ?> (Coût d'achat : <?= $produit['prix_achat'] ?> F)</option>
+                                            <?php endforeach ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 0;">
+                                        <label for="pos-qty">Quantité Lot</label>
+                                        <input type="number" id="pos-qty" class="form-control" value="10" min="1" style="padding: 12px 10px;" name="qtes">
+                                    </div>
+                                    <button type="submit"  formaction="http://localhost:8000/addPanier" class="btn-submit" style="height: 46px; width: 46px; font-size: 18px; display: flex; justify-content: center; align-items: center; background: linear-gradient(135deg, var(--accent) 0%, #0369a1 100%); font-weight: bold; border-radius: 10px;">+</button>
+
+                                </div>
+
+                                <!-- Cart Items list table -->
+                                <table class="debt-table" style="font-size: 12px;">
+                                    <thead>
+                                        <tr>
+                                            <th style="padding-bottom: 8px;">Produit</th>
+                                            <th style="padding-bottom: 8px;">Qté Livrée</th>
+                                            <th style="padding-bottom: 8px;">Coût Achat Total</th>
+                                            <th style="padding-bottom: 8px;"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="cart-rows">
+                                        <tr id="empty-cart-row">
+                                            <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 16px 0; border-bottom: none;">Aucun article dans ce lot. Ajoutez des lignes.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            <!-- </form> -->
                         </div>
 
                         <!-- Ecran de Facture Digital -->
@@ -503,7 +507,7 @@
 
                         <div class="form-group" style="margin-bottom: 24px;">
                             <label for="reference-bordereau">Référence du Bordereau de Livraison (Fournisseur)</label>
-                            <input type="text" id="reference-bordereau" class="form-control" placeholder="Ex: BL-CCS-2026-98" required>
+                            <input type="text" id="reference-bordereau" class="form-control" placeholder="Ex: BL-CCS-2026-98">
                         </div>
 
                         <button type="submit" class="btn-submit btn-success" style="padding: 16px 24px; font-weight: 800; font-size: 14px;">Enregistrer & Augmenter Stocks (DML)</button>
@@ -516,15 +520,15 @@
                     <form onsubmit="event.preventDefault(); alert('Fournisseur simulé enregistré avec succès !');">
                         <div class="form-group">
                             <label for="nom-fournisseur">Nom de l'Entreprise</label>
-                            <input type="text" id="nom-fournisseur" class="form-control" placeholder="Ex: Comptoir Céréalier Sénégalais" required>
+                            <input type="text" id="nom-fournisseur" class="form-control" placeholder="Ex: Comptoir Céréalier Sénégalais">
                         </div>
                         <div class="form-group">
                             <label for="tel-fournisseur">Téléphone de Contact</label>
-                            <input type="text" id="tel-fournisseur" class="form-control" placeholder="Ex: 338245678" required>
+                            <input type="text" id="tel-fournisseur" class="form-control" placeholder="Ex: 338245678">
                         </div>
                         <div class="form-group">
                             <label for="adr-fournisseur">Adresse / Ville</label>
-                            <input type="text" id="adr-fournisseur" class="form-control" placeholder="Ex: Port de Dakar, Hangar 4" required>
+                            <input type="text" id="adr-fournisseur" class="form-control" placeholder="Ex: Port de Dakar, Hangar 4">
                         </div>
                         <button type="submit" class="btn-submit">Créer le Fournisseur (DML)</button>
                     </form>

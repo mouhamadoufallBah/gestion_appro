@@ -3,8 +3,11 @@
 require_once(BASE_PATH."/app/controller.php");
 
 $routes = [
-    "/" => 'showLivreRapprochement',
-    "/addLivariason" => 'addLivariason'
+    "/" => 'onShowLivreRapprochement',
+    "/addLivariason" => 'onAddLivariason',
+    "/addPanier" => 'onAddPanier',
+    "/removePanier" => 'onRemovePanier',
+    "/addApprovisionnement" => 'onAddApprovisionnement',
 ];
 
 $uri = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);

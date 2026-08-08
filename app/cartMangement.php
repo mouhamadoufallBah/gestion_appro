@@ -20,19 +20,24 @@ function addToCart(array $data)
     } else {
         $_SESSION[PANIER][$key] = $data;
     }
-
-    // echo '<pre>';
-    // var_dump($key);
-    // var_dump($_SESSION[PANIER]);
-    // echo '</pre>';
-    // die;
 }
 
 function getCart(): array
 {
-    return $_SESSION[PANIER];
+    $data["panier"] = $_SESSION[PANIER];
+    $data["montantTotal"]= 0;
+    foreach ($data["panier"] as $item) {
+        $data["montantTotal"] += $item['qte'] * $item['produit']['prix_achat'];
+    }
+
+    // echo '<pre>';
+    // var_dump($data);
+    // echo '</pre>';
+    // die;
+    return $data;
 }
 
-function removeToCart(int $produit_id) {
+function removeToCart(int $produit_id)
+{
     unset($_SESSION[PANIER][$produit_id]);
 }

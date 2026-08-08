@@ -13,6 +13,8 @@ function onShowLivreRapprochement(): void
     $produits = getAllProduits();
     $panier = getCart();
 
+    // var_dump($panier);die;
+
     require_once(BASE_PATH . "/app/views/appro.html.php");
 }
 

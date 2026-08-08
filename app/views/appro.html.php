@@ -489,13 +489,13 @@
                                     </tr>
                                 </thead>
                                 <tbody id="cart-rows">
-                                    <?php $panier = $panier ?? [];
-                                    if (count($panier) == 0): ?>
+                                    <?php $panier["panier"] = $panier["panier"] ?? [];
+                                    if (count($panier["panier"]) == 0): ?>
                                         <tr id="empty-cart-row">
                                             <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 16px 0; border-bottom: none;">Aucun article dans ce lot. Ajoutez des lignes.</td>
                                         </tr>
                                     <?php else : ?>
-                                        <?php foreach ($panier as $item): ?>
+                                        <?php foreach ($panier["panier"] as $item): ?>
                                             <tr>
                                                 <td style="padding: 8px 0; font-weight:700;"><?= $item['produit']['libelle'] ?></td>
                                                 <td style="padding: 8px 0;"><?= $item['qte'] ?></td>
@@ -521,7 +521,7 @@
                         <div style="background: linear-gradient(135deg, rgba(14, 165, 233, 0.08) 0%, rgba(30, 41, 59, 0.4) 100%); border: 1px solid rgba(14, 165, 233, 0.15); border-radius: 16px; padding: 18px; text-align: center; margin-bottom: 20px; box-shadow: inset 0 0 15px rgba(14, 165, 233, 0.08);">
                             <span style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 1px; display: block; margin-bottom: 4px;">Valorisation Globale du Lot d'Entrée</span>
                             <div style="font-size: 28px; font-weight: 900; color: #38bdf8; letter-spacing: -0.5px; font-family: monospace; text-shadow: 0 0 10px rgba(56, 189, 248, 0.3);">
-                                <span id="montant_total_display_text">0</span> <span style="font-size: 16px; font-weight: 700;">FCFA</span>
+                                <span id="montant_total_display_text"><?= $panier['montantTotal'] == 0 ? 0:$panier['montantTotal'] ?></span> <span style="font-size: 16px; font-weight: 700;">FCFA</span>
                             </div>
                         </div>
 

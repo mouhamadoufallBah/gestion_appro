@@ -533,7 +533,7 @@
 
                                             <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted);">
                                                 <span><?= $ligne['qte'] ?>x <?= $ligne['libelle'] ?> (achat à <?= $ligne['prix_achat_reel'] ?> F/u)</span>
-                                                <span style="font-weight: 700; color: var(--text-main);">4 200 000 F</span>
+                                                <span style="font-weight: 700; color: var(--text-main);"><?= $ligne['montant'] ?> F</span>
                                             </div>
                                         <?php endforeach ?>
                                     <?php else: ?>

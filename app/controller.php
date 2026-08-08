@@ -11,6 +11,7 @@ function onShowLivreRapprochement(): void
     $approvisionnements = getAllApprovisionnement();
     $fournisseurs = getAllFournisseurs();
     $produits = getAllProduits();
+    $panier = getCart();
 
     require_once(BASE_PATH . "/app/views/appro.html.php");
 }
@@ -31,14 +32,22 @@ function onAddLivariason(): void
 
 function onAddPanier(): void
 {
-    var_dump($_POST); echo '</br>';
-    // $_SESSION[PANIER][$data['libelle']][] = $data;
-    var_dump($_SESSION[PANIER]);die();
+    $produit = json_decode($_POST["produit"], true);
+    $data["produit"] = $produit;
+    $data["qte"] = $_POST["qtes"];
+    addToCart($data);
+
+    header('Location: http://localhost:8000/');
+    exit;
 }
 
-function onRemovePanier():void
+function onRemovePanier(): void
 {
-    var_dump('add cart');die;
+    $id = (int)$_GET['produit_id'];
+    removeToCart($id);
+
+    header('Location: http://localhost:8000/');
+    exit;
 }
 
 

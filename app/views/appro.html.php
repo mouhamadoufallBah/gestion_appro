@@ -460,40 +460,60 @@
                             <label style="font-size: 12px; font-weight: 700; color: var(--accent); display: block; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Sélection des Articles & Coûts d'Achat</label>
                             <!-- <form method="post" action="http://localhost:8000/addPanier"> -->
 
-                                <div style="display: grid; grid-template-columns: 2fr 1fr auto; gap: 12px; align-items: flex-end; margin-bottom: 16px;">
-                                    <div class="form-group" style="margin-bottom: 0;">
-                                        <label for="pos-item-select">Article</label>
-                                        <select id="pos-item-select" class="form-control" style="background-color: #0b0f1a; color: white;" name="produit">
-                                            <?php $produits = $produits ?? [];
-                                            foreach ($produits as $produit): ?>
-                                                <option value="<?= htmlspecialchars(json_encode($produit)) ?>" data-name="<?= $produit['libelle'] ?>"> <?= $produit['libelle'] ?> (Coût d'achat : <?= $produit['prix_achat'] ?> F)</option>
-                                            <?php endforeach ?>
-                                        </select>
-                                    </div>
-                                    <div class="form-group" style="margin-bottom: 0;">
-                                        <label for="pos-qty">Quantité Lot</label>
-                                        <input type="number" id="pos-qty" class="form-control" value="10" min="1" style="padding: 12px 10px;" name="qtes">
-                                    </div>
-                                    <button type="submit"  formaction="http://localhost:8000/addPanier" class="btn-submit" style="height: 46px; width: 46px; font-size: 18px; display: flex; justify-content: center; align-items: center; background: linear-gradient(135deg, var(--accent) 0%, #0369a1 100%); font-weight: bold; border-radius: 10px;">+</button>
-
+                            <div style="display: grid; grid-template-columns: 2fr 1fr auto; gap: 12px; align-items: flex-end; margin-bottom: 16px;">
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label for="pos-item-select">Article</label>
+                                    <select id="pos-item-select" class="form-control" style="background-color: #0b0f1a; color: white;" name="produit">
+                                        <?php $produits = $produits ?? [];
+                                        foreach ($produits as $produit): ?>
+                                            <option value="<?= htmlspecialchars(json_encode($produit)) ?>" data-name="<?= $produit['libelle'] ?>"> <?= $produit['libelle'] ?> (Coût d'achat : <?= $produit['prix_achat'] ?> F)</option>
+                                        <?php endforeach ?>
+                                    </select>
                                 </div>
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label for="pos-qty">Quantité Lot</label>
+                                    <input type="number" id="pos-qty" class="form-control" value="10" min="1" style="padding: 12px 10px;" name="qtes">
+                                </div>
+                                <button type="submit" formaction="http://localhost:8000/addPanier" class="btn-submit" style="height: 46px; width: 46px; font-size: 18px; display: flex; justify-content: center; align-items: center; background: linear-gradient(135deg, var(--accent) 0%, #0369a1 100%); font-weight: bold; border-radius: 10px;">+</button>
 
-                                <!-- Cart Items list table -->
-                                <table class="debt-table" style="font-size: 12px;">
-                                    <thead>
-                                        <tr>
-                                            <th style="padding-bottom: 8px;">Produit</th>
-                                            <th style="padding-bottom: 8px;">Qté Livrée</th>
-                                            <th style="padding-bottom: 8px;">Coût Achat Total</th>
-                                            <th style="padding-bottom: 8px;"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="cart-rows">
+                            </div>
+
+                            <!-- Cart Items list table -->
+                            <table class="debt-table" style="font-size: 12px;">
+                                <thead>
+                                    <tr>
+                                        <th style="padding-bottom: 8px;">Produit</th>
+                                        <th style="padding-bottom: 8px;">Qté Livrée</th>
+                                        <th style="padding-bottom: 8px;">Coût Achat Total</th>
+                                        <th style="padding-bottom: 8px;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="cart-rows">
+                                    <?php $panier = $panier ?? [];
+                                    if (count($panier) == 0): ?>
                                         <tr id="empty-cart-row">
                                             <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 16px 0; border-bottom: none;">Aucun article dans ce lot. Ajoutez des lignes.</td>
                                         </tr>
-                                    </tbody>
-                                </table>
+                                    <?php else : ?>
+                                        <?php foreach ($panier as $item): ?>
+                                            <tr>
+                                                <td style="padding: 8px 0; font-weight:700;"><?= $item['produit']['libelle'] ?></td>
+                                                <td style="padding: 8px 0;"><?= $item['qte'] ?></td>
+                                                <td style="padding: 8px 0; font-weight:800; color:var(--accent);"><?= $item['produit']['prix_achat'] * $item['qte'] ?> F</td>
+                                                <td style="padding: 8px 0; text-align:right;">
+                                                    <a href="http://localhost:8000/removePanier?produit_id=<?= $item['produit']['id'] ?>" style="background:none; border:none; color:var(--danger); cursor:pointer; font-size:14px;">🗑️</a>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach ?>
+                                        <tr id="empty-cart-row">
+                                            <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 16px 0; border-bottom: none;">Aucun article dans ce lot. Ajoutez des lignes.</td>
+                                        </tr>
+                                    <?php endif ?>
+
+
+
+                                </tbody>
+                            </table>
                             <!-- </form> -->
                         </div>
 

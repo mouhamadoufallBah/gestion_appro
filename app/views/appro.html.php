@@ -39,6 +39,8 @@
             padding: 0;
             margin: 0;
             overflow-x: hidden;
+            overflow-y: auto;
+            /* ← Ajouté : permet le scroll vertical */
         }
 
         .app-container {
@@ -103,7 +105,8 @@
         /* Two Column Layout */
         .main-layout {
             display: grid;
-            grid-template-columns: 460px 1fr;
+            grid-template-columns: 540px 1fr;
+            /* ← Avant : 460px, trop étroit */
             gap: 32px;
             align-items: start;
         }
@@ -116,6 +119,47 @@
             padding: 32px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             margin-bottom: 32px;
+        }
+
+        /* =========================================
+        FIX : VISIBILITÉ DU CONTENU DANS LES GRILLES
+        ========================================= */
+
+        /* Empêche les enfants grid/flex de déborder de leur parent */
+        .main-layout>div,
+        .panel-card,
+        .form-group,
+        .filter-ribbon,
+        .search-bar {
+            min-width: 0;
+        }
+
+        /* Sécurise tous les inputs/selects contre le débordement */
+        .form-control,
+        .search-input,
+        .draft-textarea {
+            max-width: 100%;
+            min-width: 0;
+        }
+
+        /* Empêche les textes longs d'être coupés */
+        .panel-title,
+        .form-group label,
+        .debt-table td,
+        .debt-table th {
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+
+        /* Garantit que les tableaux ne débordent pas */
+        .debt-table {
+            table-layout: auto;
+            width: 100%;
+        }
+
+        /* Les selects prennent toute la largeur disponible */
+        select.form-control {
+            width: 100%;
         }
 
         .panel-title {
@@ -402,9 +446,10 @@
                             <label for="supplier-select">Fournisseur Partenaire</label>
                             <div style="position: relative;">
                                 <select id="supplier-select" class="form-control" style="width: 100%; appearance: none; padding-right: 30px;">
-                                    <option value="CCS">Comptoir Céréalier Sénégalais (CCS)</option>
-                                    <option value="Diop & Freres">Grossiste Alimentaire Diop & Frères</option>
-                                    <option value="SODIDA">SODIDA Distributeurs Réunis</option>
+                                    <?php $fournisseurs = $fournisseurs ?? [];
+                                    foreach ($fournisseurs as $fournisseur): ?>
+                                        <option value="<?= $fournisseur['id'] ?>"><?= $fournisseur['nom'] ?></option>
+                                    <?php endforeach ?>
                                 </select>
                                 <span style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--text-muted); font-size: 12px;">▼</span>
                             </div>
@@ -417,10 +462,10 @@
                                 <div class="form-group" style="margin-bottom: 0;">
                                     <label for="pos-item-select">Article</label>
                                     <select id="pos-item-select" class="form-control" style="background-color: #0b0f1a; color: white;">
-                                        <option value="21000" data-name="Sac de riz 50kg">Sac de riz 50kg (Coût d'achat : 21 000 F)</option>
-                                        <option value="6500" data-name="Bidon d'huile 5L">Bidon d'huile 5L (Coût d'achat : 6 500 F)</option>
-                                        <option value="9500" data-name="Carton de savon">Carton de savon (Coût d'achat : 9 500 F)</option>
-                                        <option value="1200" data-name="Paquet de sucre 1kg">Paquet de sucre 1kg (Coût d'achat : 1 200 F)</option>
+                                        <?php $produits = $produits ?? [];
+                                        foreach ($produits as $produit): ?>
+                                            <option value="<?= $produit['id'] ?>" data-name="<?= $produit['libelle'] ?>"> <?= $produit['libelle'] ?> (Coût d'achat : <?= $produit['prix_achat'] ?> F)</option>
+                                        <?php endforeach ?>
                                     </select>
                                 </div>
                                 <div class="form-group" style="margin-bottom: 0;">

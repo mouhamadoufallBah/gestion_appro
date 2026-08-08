@@ -79,7 +79,7 @@ function getAllApprovisionnement(): array
     return $approvisionnements;
 }
 
-function addApprovisionnement(array $data): int
+function addReception(array $data): int
 {
     $db = deconnecteDB();
     try {
@@ -117,4 +117,10 @@ function addApprovisionnement(array $data): int
     }
 
     return true;
+}
+
+function addApprovisionnement(array $data): int
+{
+
+    return 0;
 }

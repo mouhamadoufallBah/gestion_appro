@@ -19,8 +19,7 @@ function getProduitQteAlert(): array
 
 function getAllProduits(): array
 {
-    $sql = "select libelle, qte_stock, id, prix_achat
-            from produits";
+    $sql = "select libelle, qte_stock, id, prix_achat from produits";
 
     $db = deconnecteDB();
     $produitEnRupture = query($db, $sql ,false);

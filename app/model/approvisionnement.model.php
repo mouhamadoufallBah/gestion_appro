@@ -28,7 +28,7 @@ function getLivreRapprochement(): array
 
 function getAllApprovisionnement(): array
 {
-    $sql = "SELECT a.id, a.ref_bl, a.dateappro, s.libelle as statut, f.nom, sum(da.prix_achat_reel * case when da.qte_recu = 0 then da.qte_appro else da.qte_recu end ) as montant
+    $sql = "SELECT a.id, a.ref_bl, to_char(a.dateappro, 'DD TMMONTH YYYY') as dateappro, s.libelle as statut, f.nom, sum(round(da.prix_achat_reel * case when da.qte_recu = 0 then da.qte_appro else da.qte_recu end, 2) ) as montant
             FROM approvisionnements a
             inner join detail_approvisionnements da on da.approvisionnement_id = a.id
             inner join fournisseurs f on f.id = a.fournisseur_id

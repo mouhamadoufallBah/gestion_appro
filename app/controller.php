@@ -50,28 +50,26 @@ function onRemovePanier(): void
     exit;
 }
 
-
 function onAddApprovisionnement(): void
 {
-    // $data = $_POST;
     unset($_POST["produit"], $_POST["qtes"]);
     $data["approvisionnement"] = $_POST;
 
     $panier = getCart();
-    // $data["deatilAppro"] = $panier;
 
     foreach ($panier["panier"] as $key => $item) {
         $data["deatilAppro"][$key]['produit_id'] = (int)$item["produit"]['id'];
         $data["deatilAppro"][$key]['prix_achat'] = (int)$item["produit"]['prix_achat'];
         $data["deatilAppro"][$key]['qte'] = (int)$item['qte'];
     }
+
     $results = addApprovisionnement($data);
     if ($results) {
         viderCart();
         header('Location: http://localhost:8000/');
         exit;
     } else {
-        var_dump('erreur lors de la recption');
+        var_dump('erreur lors de l\'ajout appro ');
         die();
     }
 }

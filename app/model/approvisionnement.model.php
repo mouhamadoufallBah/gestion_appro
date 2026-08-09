@@ -121,6 +121,38 @@ function addReception(array $data): int
 
 function addApprovisionnement(array $data): int
 {
+    // echo "<pre>";
+    // var_dump($data);
+    // echo "</pre>";
+    // die();
 
-    return 0;
+    $db = deconnecteDB();
+
+    try {
+        $db->beginTransaction();
+
+        $sql_add_appro = "insert into approvisionnements(ref_bl, fournisseur_id)values(:ref_bl, :fournisseur_id)";
+        $resAppro = executeUpdate($db, $sql_add_appro, ['ref_bl' => $data["approvisionnement"]["ref_bl"], 'fournisseur_id' => (int)$data["approvisionnement"]["fournisseur_id"]]);
+
+        if ($resAppro == 0) {
+            throw new Exception('approvisonnement non ajouter');
+        }
+
+        $approvisionnment_id = $db->lastInsertId();
+
+        foreach ($data["deatilAppro"] as $detail) {
+            $sql_add_detail = "insert into detail_approvisionnements(produit_id, prix_achat_reel, qte_appro, approvisionnement_id)values(:produit_id, :prix_achat_reel, :qte_appro, :approvisionnement_id)";
+            $resDetail = executeUpdate($db, $sql_add_detail, ['approvisionnement_id' => $approvisionnment_id, 'produit_id' => $detail['produit_id'], 'prix_achat_reel' => $detail['prix_achat'], 'qte_appro' => $detail['qte']]);
+
+            if ($resDetail == 0) {
+                throw new Exception('approvisonnement non ajouter');
+            }
+        }
+
+        $db->commit();
+        return true;
+    } catch (\Throwable $th) {
+        $db->rollBack();
+        return false;
+    }
 }

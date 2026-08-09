@@ -445,7 +445,7 @@
                         <div class="form-group">
                             <label for="supplier-select">Fournisseur Partenaire</label>
                             <div style="position: relative;">
-                                <select id="supplier-select" class="form-control" style="width: 100%; appearance: none; padding-right: 30px;">
+                                <select id="supplier-select" class="form-control" style="width: 100%; appearance: none; padding-right: 30px;" name="fournisseur_id">
                                     <?php $fournisseurs = $fournisseurs ?? [];
                                     foreach ($fournisseurs as $fournisseur): ?>
                                         <option value="<?= $fournisseur['id'] ?>"><?= $fournisseur['nom'] ?></option>
@@ -527,7 +527,7 @@
 
                         <div class="form-group" style="margin-bottom: 24px;">
                             <label for="reference-bordereau">Référence du Bordereau de Livraison (Fournisseur)</label>
-                            <input type="text" id="reference-bordereau" class="form-control" placeholder="Ex: BL-CCS-2026-98">
+                            <input type="text" name="ref_bl" id="reference-bordereau" class="form-control" placeholder="Ex: BL-CCS-2026-98" required>
                         </div>
 
                         <button type="submit" class="btn-submit btn-success" style="padding: 16px 24px; font-weight: 800; font-size: 14px;">Enregistrer & Augmenter Stocks (DML)</button>

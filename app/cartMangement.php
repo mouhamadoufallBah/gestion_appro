@@ -25,7 +25,7 @@ function addToCart(array $data)
 function getCart(): array
 {
     $data["panier"] = $_SESSION[PANIER];
-    $data["montantTotal"]= 0;
+    $data["montantTotal"] = 0;
     foreach ($data["panier"] as $item) {
         $data["montantTotal"] += $item['qte'] * $item['produit']['prix_achat'];
     }
@@ -40,4 +40,9 @@ function getCart(): array
 function removeToCart(int $produit_id)
 {
     unset($_SESSION[PANIER][$produit_id]);
+}
+
+function viderCart()
+{
+    $_SESSION[PANIER] = [];
 }

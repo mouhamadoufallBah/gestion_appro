@@ -20,11 +20,10 @@ function getProduitQteAlert(): array
 function getAllProduits(): array
 {
     $sql = "select libelle, qte_stock, id, prix_achat
-            from produits 
-            where qte_stock > :min";
+            from produits";
 
     $db = deconnecteDB();
-    $produitEnRupture = executeQuery($db, $sql,['min' => 0] ,false);
+    $produitEnRupture = query($db, $sql ,false);
 
     return $produitEnRupture;
 }
